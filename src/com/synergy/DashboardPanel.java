@@ -1,123 +1,119 @@
 package com.synergy;
 
-import com.synergy.ui.CoursesTable;
-import com.synergy.ui.DocumentsView;
-import com.synergy.ui.HeaderPanel;
-import com.synergy.ui.MetricCard;
+import com.synergy.auth.UserSession;
+import com.synergy.ui.ElectronicDiaryView;
 import com.synergy.ui.PaymentsView;
-import com.synergy.ui.RoundedPanel;
-import com.synergy.ui.ScheduleView;
+import com.synergy.ui.SchoolScheduleView;
 import com.synergy.ui.SemesterProgressPanel;
+import com.synergy.ui.Sidebar;
+import com.synergy.ui.SubjectCard;
 import com.synergy.ui.SynergyIcons;
 import com.synergy.utils.ColorScheme;
 import com.synergy.utils.Localization;
 import java.awt.BorderLayout;
-import com.synergy.ui.TransitionContainer;
+import java.awt.CardLayout;
 import java.awt.Dimension;
-import java.awt.GridLayout;
-import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 public class DashboardPanel extends JPanel {
-    private TransitionContainer contentArea;
-    private HeaderPanel header;
+    private Sidebar sidebar;
     private SemesterProgressPanel semesterPanel;
-    private JPanel statsPanel;
+    private final JPanel contentPanel;
+    private final CardLayout cardLayout;
 
     public DashboardPanel() {
         setLayout(new BorderLayout());
         setBackground(ColorScheme.APP_BACKGROUND);
-        
-        header = new HeaderPanel();
-        add(header, BorderLayout.NORTH);
-        
-        contentArea = new TransitionContainer();
-        
-        contentArea.addView(createCoursesView(), "COURSES");
-        contentArea.addView(new ScheduleView(), "SCHEDULE");
-        contentArea.addView(new PaymentsView(), "PAYMENTS");
-        contentArea.addView(new DocumentsView(), "DOCUMENTS");
-        
-        add(contentArea, BorderLayout.CENTER);
-        
-        contentArea.showView("COURSES");
-        
-        header.setNavigationListener((viewName) -> {
-            if ("Courses".equals(viewName) || "Курсы".equals(viewName)) contentArea.showView("COURSES");
-            else if ("Schedule".equals(viewName) || "Расписание".equals(viewName)) contentArea.showView("SCHEDULE");
-            else if ("Payments".equals(viewName) || "Оплата".equals(viewName)) contentArea.showView("PAYMENTS");
-            else if ("Profile".equals(viewName) || "Зачетка".equals(viewName)) {
-                contentArea.showView("DOCUMENTS");
-            }
+
+        sidebar = new Sidebar();
+        add(sidebar, BorderLayout.WEST);
+
+        cardLayout = new CardLayout();
+        contentPanel = new JPanel(cardLayout);
+        contentPanel.setOpaque(false);
+        add(contentPanel, BorderLayout.CENTER);
+
+        sidebar.addNavItem("COURSES", "menu.courses", SynergyIcons.getGridIcon(20, false));
+        sidebar.addNavItem("SCHEDULE", "menu.schedule", SynergyIcons.getCalendarIcon(20, false));
+        sidebar.addNavItem("PAYMENTS", "menu.payments", SynergyIcons.getBillIcon(20, false));
+        sidebar.addNavItem("DIARY", "menu.profile", SynergyIcons.getDocumentIcon(20, false));
+        sidebar.buildNav();
+
+        sidebar.setNavigationListener((viewName) -> {
+            cardLayout.show(contentPanel, viewName);
         });
-        
-        Localization.setLanguageListener(v -> updateLanguage());
+
+        setupViews();
     }
-    
-    private void updateLanguage() {
-        header.refresh();
-        if (semesterPanel != null) semesterPanel.refresh();
-        if (statsPanel != null) {
-            statsPanel.removeAll();
-            statsPanel.add(new MetricCard(Localization.get("stats.points"), "120", SynergyIcons.getStarIcon(16), 85));
-            statsPanel.add(new MetricCard(Localization.get("stats.debts"), "2", SynergyIcons.getWarningIcon(16), 10));
-            statsPanel.add(new MetricCard(Localization.get("stats.progress"), "75%", SynergyIcons.getTrendIcon(16), 75));
-            statsPanel.revalidate();
-            statsPanel.repaint();
-        }
-        
-        // Re-create views to apply translations
-        contentArea.removeAll();
-        contentArea.addView(createCoursesView(), "COURSES");
-        contentArea.addView(new ScheduleView(), "SCHEDULE");
-        contentArea.addView(new PaymentsView(), "PAYMENTS");
-        contentArea.addView(new DocumentsView(), "DOCUMENTS");
-        contentArea.showView("COURSES"); // Reset to courses or track current view
+
+    private void setupViews() {
+        contentPanel.add(createCoursesView(), "COURSES");
+        contentPanel.add(new SchoolScheduleView(), "SCHEDULE");
+        contentPanel.add(new PaymentsView(), "PAYMENTS");
+        contentPanel.add(new ElectronicDiaryView(), "DIARY");
+        cardLayout.show(contentPanel, "COURSES");
     }
 
     private JPanel createCoursesView() {
-        JPanel contentPanel = new JPanel(new BorderLayout(0, 25));
-        contentPanel.setOpaque(false);
-        contentPanel.setBorder(BorderFactory.createEmptyBorder(30, 40, 30, 40));
-        
-        JPanel topSection = new JPanel(new BorderLayout(0, 25));
-        topSection.setOpaque(false);
-        topSection.add(createStats(), BorderLayout.NORTH);
-        
+        JPanel coursesPanel = new JPanel(new BorderLayout(0, 20));
+        coursesPanel.setOpaque(false);
+        coursesPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(30, 40, 30, 40));
+
         semesterPanel = new SemesterProgressPanel();
-        topSection.add(semesterPanel, BorderLayout.CENTER);
-        
-        contentPanel.add(topSection, BorderLayout.NORTH);
-        contentPanel.add(createTableSection(), BorderLayout.CENTER);
-        
-        return contentPanel;
+        coursesPanel.add(semesterPanel, BorderLayout.NORTH);
+        coursesPanel.add(createTableSection(), BorderLayout.CENTER);
+
+        return coursesPanel;
     }
 
-    private JPanel createStats() {
-        statsPanel = new JPanel(new GridLayout(1, 3, 25, 0));
-        statsPanel.setOpaque(false);
-        statsPanel.setPreferredSize(new Dimension(0, 140));
-        
-        statsPanel.add(new MetricCard(Localization.get("stats.points"), "120", SynergyIcons.getStarIcon(16), 85));
-        statsPanel.add(new MetricCard(Localization.get("stats.debts"), "2", SynergyIcons.getWarningIcon(16), 10));
-        statsPanel.add(new MetricCard(Localization.get("stats.progress"), "75%", SynergyIcons.getTrendIcon(16), 75));
-        
-        return statsPanel;
+    public void updateLanguage() {
+        sidebar.refresh();
+        contentPanel.removeAll();
+        setupViews();
+        semesterPanel.refresh();
+        revalidate();
+        repaint();
     }
 
     private JPanel createTableSection() {
-        RoundedPanel tableContainer = new RoundedPanel(16, true);
-        tableContainer.setBackground(ColorScheme.CARD_BACKGROUND);
-        tableContainer.setLayout(new BorderLayout());
-        tableContainer.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        JPanel listContainer = new JPanel(new BorderLayout());
+        listContainer.setOpaque(false);
         
-        CoursesTable coursesTable = new CoursesTable();
-        JScrollPane scrollPane = new JScrollPane(coursesTable);
-        scrollPane.setBorder(BorderFactory.createEmptyBorder());
-        scrollPane.getViewport().setBackground(ColorScheme.CARD_BACKGROUND);
+        JLabel title = new JLabel("Мои предметы");
+        title.setFont(com.synergy.utils.FontManager.getBoldFont(20));
+        title.setForeground(ColorScheme.PRIMARY_TEXT);
+        title.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 25, 15, 0));
+        listContainer.add(title, BorderLayout.NORTH);
         
-        tableContainer.add(scrollPane, BorderLayout.CENTER);
-        return tableContainer;
+        JPanel subjectsList = createSubjectsList();
+        JScrollPane scrollPane = new JScrollPane(subjectsList);
+        scrollPane.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+        scrollPane.getViewport().setBackground(ColorScheme.APP_BACKGROUND);
+        
+        listContainer.add(scrollPane, BorderLayout.CENTER);
+        return listContainer;
+    }
+    
+    private JPanel createSubjectsList() {
+        JPanel listPanel = new JPanel();
+        listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.Y_AXIS));
+        listPanel.setOpaque(false);
+        listPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 25, 0, 25));
+        
+        listPanel.add(new SubjectCard("Математический анализ I", "Проф. Б. Иванов", "A"));
+        listPanel.add(Box.createVerticalStrut(10));
+        listPanel.add(new SubjectCard("Основы программирования", "Проф. А. Петрова", "B+"));
+        listPanel.add(Box.createVerticalStrut(10));
+        listPanel.add(new SubjectCard("История России", "Проф. В. Сидоров", "C"));
+        listPanel.add(Box.createVerticalStrut(10));
+        listPanel.add(new SubjectCard("Английский язык", "Проф. Е. Козлова", "A-"));
+        listPanel.add(Box.createVerticalStrut(10));
+        listPanel.add(new SubjectCard("Физика: Механика", "Проф. Г. Смирнов", "B"));
+        
+        return listPanel;
     }
 }

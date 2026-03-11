@@ -1,6 +1,7 @@
 package com.synergy.ui;
 
 import com.synergy.utils.ColorScheme;
+import com.synergy.utils.FontManager;
 import com.synergy.utils.Localization;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -14,6 +15,7 @@ import java.awt.Insets;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.Icon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -36,7 +38,7 @@ public class PaymentsView extends JPanel {
         panel.setOpaque(false);
 
         JLabel title = new JLabel(Localization.get("payments.title"));
-        title.setFont(new Font("Arial", Font.BOLD, 24));
+        title.setFont(FontManager.getBoldFont(24));
         title.setForeground(ColorScheme.PRIMARY_TEXT);
         panel.add(title, BorderLayout.NORTH);
 
@@ -44,43 +46,51 @@ public class PaymentsView extends JPanel {
         cards.setOpaque(false);
         cards.setPreferredSize(new Dimension(0, 120));
 
-        cards.add(createSummaryCard(Localization.get("payments.paid"), "$12,500", new Color(46, 204, 113))); // Green
-        cards.add(createSummaryCard(Localization.get("payments.due"), "$2,500", new Color(241, 196, 15)));   // Orange
-        cards.add(createSummaryCard(Localization.get("payments.outstanding"), "$2,500", ColorScheme.PRIMARY_RED)); // Red
+        cards.add(createSummaryCard(Localization.get("payments.paid"), "$12,500", SynergyIcons.getBillIcon(24, true)));
+        cards.add(createSummaryCard(Localization.get("payments.due"), "$2,500", SynergyIcons.getCalendarIcon(24, false)));
+        cards.add(createSummaryCard(Localization.get("payments.outstanding"), "$2,500", SynergyIcons.getAlertIcon(24)));
 
         panel.add(cards, BorderLayout.CENTER);
         return panel;
     }
 
-    private JPanel createSummaryCard(String title, String value, Color accentColor) {
+    private JPanel createSummaryCard(String title, String value, Icon icon) {
         RoundedPanel card = new RoundedPanel(16, true);
         card.setBackground(Color.WHITE);
-        card.setLayout(new BorderLayout());
+        card.setLayout(new GridBagLayout());
         card.setBorder(new EmptyBorder(20, 25, 20, 25));
 
+        GridBagConstraints gbc = new GridBagConstraints();
+
+        // Icon
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridheight = 2;
+        gbc.anchor = GridBagConstraints.NORTHWEST;
+        gbc.insets = new Insets(0, 0, 0, 15);
+        JLabel iconLabel = new JLabel(icon);
+        card.add(iconLabel, gbc);
+
+        // Title
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        gbc.gridheight = 1;
+        gbc.anchor = GridBagConstraints.LAST_LINE_START;
+        gbc.insets = new Insets(0, 0, 0, 0);
         JLabel titleLbl = new JLabel(title);
-        titleLbl.setFont(new Font("Arial", Font.BOLD, 14));
+        titleLbl.setFont(FontManager.getBoldFont(14));
         titleLbl.setForeground(ColorScheme.SECONDARY_TEXT);
+        card.add(titleLbl, gbc);
 
+        // Value
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        gbc.anchor = GridBagConstraints.FIRST_LINE_START;
         JLabel valueLbl = new JLabel(value);
-        valueLbl.setFont(new Font("Arial", Font.BOLD, 28));
+        valueLbl.setFont(FontManager.getBoldFont(28));
         valueLbl.setForeground(ColorScheme.PRIMARY_TEXT);
+        card.add(valueLbl, gbc);
 
-        JPanel line = new JPanel();
-        line.setBackground(accentColor);
-        line.setPreferredSize(new Dimension(4, 20));
-        
-        JPanel left = new JPanel(new BorderLayout(15, 0));
-        left.setOpaque(false);
-        left.add(line, BorderLayout.WEST);
-        
-        JPanel textPanel = new JPanel(new GridLayout(2, 1, 0, 5));
-        textPanel.setOpaque(false);
-        textPanel.add(titleLbl);
-        textPanel.add(valueLbl);
-        left.add(textPanel, BorderLayout.CENTER);
-
-        card.add(left, BorderLayout.CENTER);
         return card;
     }
 
@@ -92,7 +102,7 @@ public class PaymentsView extends JPanel {
         JPanel header = new JPanel(new BorderLayout());
         header.setOpaque(false);
         JLabel listTitle = new JLabel(Localization.get("payments.history"));
-        listTitle.setFont(new Font("Arial", Font.BOLD, 18));
+        listTitle.setFont(FontManager.getBoldFont(18));
         listTitle.setForeground(ColorScheme.PRIMARY_TEXT);
         
         PillButton payButton = new PillButton(Localization.get("payments.make_payment"), true);
@@ -136,34 +146,51 @@ public class PaymentsView extends JPanel {
         
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 20, 10, 20);
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.anchor = GridBagConstraints.WEST;
 
-        JPanel info = new JPanel(new GridLayout(2, 1, 0, 5));
+        // Status Circle
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridheight = 2;
+        gbc.insets = new Insets(0, 0, 0, 15);
+        JPanel statusCircle = new JPanel();
+        statusCircle.setBackground(statusColor);
+        statusCircle.setPreferredSize(new Dimension(10, 10));
+        row.add(statusCircle, gbc);
+
+        // Info Panel
+        JPanel info = new JPanel(new GridLayout(2, 1, 0, 2));
         info.setOpaque(false);
         JLabel t = new JLabel(title);
-        t.setFont(new Font("Arial", Font.BOLD, 15));
+        t.setFont(FontManager.getBoldFont(15));
         t.setForeground(ColorScheme.PRIMARY_TEXT);
         JLabel d = new JLabel(date);
-        d.setFont(new Font("Arial", Font.PLAIN, 12));
+        d.setFont(FontManager.getRegularFont(12));
         d.setForeground(ColorScheme.SECONDARY_TEXT);
         info.add(t);
         info.add(d);
         
-        gbc.gridx = 0; 
+        gbc.gridx = 1;
+        gbc.gridheight = 2;
         gbc.weightx = 1.0;
+        gbc.insets = new Insets(0, 0, 0, 0);
         row.add(info, gbc);
 
+        // Amount
         JLabel amt = new JLabel(amount);
-        amt.setFont(new Font("Arial", Font.BOLD, 16));
+        amt.setFont(FontManager.getBoldFont(16));
         amt.setForeground(ColorScheme.PRIMARY_TEXT);
-        gbc.gridx = 1;
+        gbc.gridx = 2;
         gbc.weightx = 0;
+        gbc.insets = new Insets(0, 20, 0, 20);
         row.add(amt, gbc);
 
-        TypeBadge badge = new TypeBadge(status, statusColor);
-        gbc.gridx = 2;
-        row.add(badge, gbc);
+        // Status Text
+        JLabel statusLabel = new JLabel(status);
+        statusLabel.setFont(FontManager.getBoldFont(12));
+        statusLabel.setForeground(statusColor);
+        gbc.gridx = 3;
+        row.add(statusLabel, gbc);
 
         return row;
     }

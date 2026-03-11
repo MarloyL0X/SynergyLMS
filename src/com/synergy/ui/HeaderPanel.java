@@ -2,6 +2,7 @@ package com.synergy.ui;
 
 import com.synergy.auth.UserSession;
 import com.synergy.utils.ColorScheme;
+import com.synergy.utils.FontManager;
 import com.synergy.utils.Localization;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -52,8 +53,8 @@ public class HeaderPanel extends JPanel {
         logoPanel.setOpaque(false);
         JLabel logoLabel = new JLabel(Localization.get("app.title"));
         logoLabel.setIcon(SynergyIcons.getLogoIcon(24));
-        logoLabel.setFont(new Font("Arial", Font.BOLD, 16));
-        logoLabel.setForeground(Color.WHITE);
+        logoLabel.setFont(FontManager.getBoldFont(16));
+        logoLabel.setForeground(ColorScheme.PRIMARY_TEXT);
         logoLabel.setIconTextGap(12);
         logoPanel.add(logoLabel);
         return logoPanel;
@@ -127,7 +128,7 @@ public class HeaderPanel extends JPanel {
             label.setVerticalTextPosition(SwingConstants.BOTTOM);
             label.setHorizontalTextPosition(SwingConstants.CENTER);
             label.setForeground(active ? ColorScheme.ICON_ACTIVE : ColorScheme.ICON_INACTIVE);
-            label.setFont(new Font("Arial", Font.PLAIN, 11));
+            label.setFont(FontManager.getRegularFont(11));
             
             label.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 5, 0));
             
@@ -135,7 +136,7 @@ public class HeaderPanel extends JPanel {
 
             addMouseListener(new MouseAdapter() {
                 public void mouseEntered(MouseEvent e) { 
-                    if (!MenuItem.this.active) label.setForeground(Color.WHITE); 
+                    if (!MenuItem.this.active) label.setForeground(ColorScheme.ICON_ACTIVE); 
                 }
                 public void mouseExited(MouseEvent e) { 
                     if (!MenuItem.this.active) label.setForeground(ColorScheme.ICON_INACTIVE); 

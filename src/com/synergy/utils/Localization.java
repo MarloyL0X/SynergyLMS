@@ -12,16 +12,16 @@ public class Localization {
 
     static {
         // --- English ---
-        en.put("app.title", "SYNERGY UNIVERSITY");
-        en.put("menu.courses", "Courses");
+        en.put("app.title", "SCHOOL \"PERSPEKTIVA\"");
+        en.put("menu.courses", "Subjects");
         en.put("menu.schedule", "Schedule");
         en.put("menu.payments", "Payments");
-        en.put("menu.profile", "Profile");
+        en.put("menu.profile", "Diary");
         
         en.put("stats.points", "POINTS");
         en.put("stats.debts", "DEBTS");
         en.put("stats.progress", "PROGRESS");
-        en.put("semester", "Semester");
+        en.put("semester", "Quarter");
         
         en.put("schedule.title", "My Schedule");
         en.put("schedule.sort", "Sort by: ");
@@ -31,10 +31,10 @@ public class Localization {
         en.put("schedule.room", "Room");
         
         // Missing keys added
-        en.put("schedule.type.lecture", "Lecture");
+        en.put("schedule.type.lecture", "Lesson");
         en.put("schedule.type.practice", "Practice");
-        en.put("schedule.type.exam", "Exam");
-        en.put("schedule.type.seminar", "Seminar");
+        en.put("schedule.type.exam", "Test");
+        en.put("schedule.type.seminar", "Class Hour");
         
         en.put("payments.title", "Financial Overview");
         en.put("payments.paid", "Total Paid");
@@ -58,9 +58,9 @@ public class Localization {
         en.put("pay.winter2024", "Winter 2024 Lab Fee");
         en.put("pay.overdue_jan", "Overdue since Jan 2025");
         
-        en.put("table.course", "Course Name");
-        en.put("table.instructor", "Instructor");
-        en.put("table.credits", "Credits");
+        en.put("table.course", "Subject Name");
+        en.put("table.instructor", "Teacher");
+        en.put("table.credits", "Hours");
         en.put("table.grade", "Grade");
         en.put("table.status", "Status");
         en.put("table.action", "Action");
@@ -71,55 +71,50 @@ public class Localization {
         
         en.put("details.progress", "Progress");
         en.put("details.completed", "Completed");
-        en.put("details.topics", "Course Topics & Assignments");
+        en.put("details.topics", "Topics & Assignments");
         en.put("details.topic_prefix", "Topic");
         en.put("details.topic_title", "Introduction to concepts");
         en.put("details.close", "Close Details");
-        en.put("badge.course", "Course");
+        en.put("badge.course", "Subject");
         en.put("details.teacher", "Teacher");
         en.put("details.homework", "Homework");
 
-        en.put("docs.title", "Academic Record (Gradebook)");
+        en.put("docs.title", "Electronic Diary");
         en.put("docs.subject", "Subject");
-        en.put("docs.sem", "Semester");
-        en.put("docs.type", "Type");
+        en.put("docs.quarter", "Quarter");
+        en.put("docs.work_type", "Work Type");
         en.put("docs.grade", "Grade");
         en.put("docs.date", "Date");
-        en.put("docs.student", "STUDENT");
-        en.put("docs.group", "GROUP");
-        en.put("docs.faculty", "FACULTY");
+        en.put("docs.student", "PUPIL");
+        en.put("docs.group", "CLASS");
+        en.put("docs.faculty", "PROFILE");
         en.put("docs.status", "STATUS");
-        en.put("docs.status_val", "Active Student");
-        en.put("docs.faculty_val", "Information Systems & Technology");
-        
-        en.put("login.title", "Login");
-        en.put("login.username", "Username");
-        en.put("login.password", "Password");
-        en.put("login.btn", "Sign In");
-        en.put("login.no_account", "No account? Get access code");
+        en.put("docs.status_val", "Active");
+        en.put("docs.faculty_val", "Physics & Mathematics");
+        en.put("docs.class", "Class");
 
         // --- Russian ---
-        ru.put("app.title", "УНИВЕРСИТЕТ СИНЕРГИЯ");
-        ru.put("menu.courses", "Курсы");
+        ru.put("app.title", "ШКОЛА \"ПЕРСПЕКТИВА\"");
+        ru.put("menu.courses", "Предметы");
         ru.put("menu.schedule", "Расписание");
         ru.put("menu.payments", "Оплата");
-        ru.put("menu.profile", "Зачетка");
+        ru.put("menu.profile", "Дневник");
         
         ru.put("stats.points", "БАЛЛЫ");
         ru.put("stats.debts", "ДОЛГИ");
-        ru.put("stats.progress", "ПРОГРЕСС");
-        ru.put("semester", "Семестр");
+        ru.put("stats.progress", "УСПЕВАЕМОСТЬ");
+        ru.put("semester", "Четверть");
         
         ru.put("schedule.title", "Мое расписание");
         ru.put("schedule.sort", "Сортировать: ");
         ru.put("schedule.today", "Сегодня");
         ru.put("schedule.tomorrow", "Завтра");
         ru.put("schedule.week", "Эта неделя");
-        ru.put("schedule.room", "Ауд.");
-        ru.put("schedule.type.lecture", "Лекция");
+        ru.put("schedule.room", "Каб.");
+        ru.put("schedule.type.lecture", "Урок");
         ru.put("schedule.type.practice", "Практика");
-        ru.put("schedule.type.exam", "Экзамен");
-        ru.put("schedule.type.seminar", "Семинар");
+        ru.put("schedule.type.exam", "Контрольная работа");
+        ru.put("schedule.type.seminar", "Классный час");
         
         ru.put("payments.title", "Финансовый обзор");
         ru.put("payments.paid", "Всего оплачено");
@@ -143,9 +138,9 @@ public class Localization {
         ru.put("pay.winter2024", "Лаб. сбор Зима 2024");
         ru.put("pay.overdue_jan", "Просрочено с Янв 2025");
         
-        ru.put("table.course", "Название курса");
-        ru.put("table.instructor", "Преподаватель");
-        ru.put("table.credits", "Кредиты");
+        ru.put("table.course", "Название предмета");
+        ru.put("table.instructor", "Учитель");
+        ru.put("table.credits", "Часы");
         ru.put("table.grade", "Оценка");
         ru.put("table.status", "Статус");
         ru.put("table.action", "Действие");
@@ -156,26 +151,27 @@ public class Localization {
         
         ru.put("details.progress", "Прогресс");
         ru.put("details.completed", "Завершено");
-        ru.put("details.topics", "Темы курса и задания");
+        ru.put("details.topics", "Темы и задания");
         ru.put("details.topic_prefix", "Тема");
         ru.put("details.topic_title", "Введение в концепции");
         ru.put("details.close", "Закрыть");
-        ru.put("badge.course", "Курс");
-        ru.put("details.teacher", "Преподаватель");
+        ru.put("badge.course", "Предмет");
+        ru.put("details.teacher", "Учитель");
         ru.put("details.homework", "Домашнее задание");
         
-        ru.put("docs.title", "Академическая успеваемость (Зачетная книжка)");
+        ru.put("docs.title", "Электронный дневник");
         ru.put("docs.subject", "Предмет");
-        ru.put("docs.sem", "Семестр");
-        ru.put("docs.type", "Тип");
+        ru.put("docs.quarter", "Четверть");
+        ru.put("docs.work_type", "Вид работы");
         ru.put("docs.grade", "Оценка");
         ru.put("docs.date", "Дата");
-        ru.put("docs.student", "СТУДЕНТ");
-        ru.put("docs.group", "ГРУППА");
-        ru.put("docs.faculty", "ФАКУЛЬТЕТ");
+        ru.put("docs.student", "УЧЕНИК");
+        ru.put("docs.group", "КЛАСС");
+        ru.put("docs.faculty", "НАПРАВЛЕНИЕ");
         ru.put("docs.status", "СТАТУС");
-        ru.put("docs.status_val", "Активный студент");
-        ru.put("docs.faculty_val", "Информационные Системы и Технологии");
+        ru.put("docs.status_val", "Учится");
+        ru.put("docs.faculty_val", "Физико-математическое");
+        ru.put("docs.class", "Класс");
         
         ru.put("login.title", "Вход");
         ru.put("login.username", "Имя пользователя");

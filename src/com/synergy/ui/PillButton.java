@@ -2,6 +2,7 @@ package com.synergy.ui;
 
 import com.synergy.utils.AnimationUtils;
 import com.synergy.utils.Animator;
+import com.synergy.utils.FontManager;
 import com.synergy.utils.ColorScheme;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -31,7 +32,7 @@ public class PillButton extends JButton {
         setContentAreaFilled(false);
         setFocusPainted(false);
         setBorderPainted(false);
-        setFont(new Font("Arial", Font.BOLD, 12));
+        setFont(FontManager.getBoldFont(12));
         setForeground(primary ? Color.WHITE : ColorScheme.PRIMARY_TEXT);
         setCursor(new Cursor(Cursor.HAND_CURSOR));
         setupInteractions();
@@ -49,8 +50,8 @@ public class PillButton extends JButton {
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         
-        Color baseColor = isPrimary ? ColorScheme.PRIMARY_RED : ColorScheme.TOP_BAR_BG;
-        Color hoverColor = isPrimary ? ColorScheme.PRIMARY_RED.brighter() : new Color(60, 62, 66);
+        Color baseColor = isPrimary ? ColorScheme.PRIMARY_BLUE : new Color(229, 229, 234);
+        Color hoverColor = isPrimary ? ColorScheme.PRIMARY_BLUE.brighter() : new Color(209, 209, 214);
         
         // Use utility to mix colors
         g2.setColor(AnimationUtils.interpolateColor(baseColor, hoverColor, hoverProgress));

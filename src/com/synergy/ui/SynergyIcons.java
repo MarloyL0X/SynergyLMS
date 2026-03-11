@@ -1,6 +1,9 @@
 package com.synergy.ui;
 
 import com.synergy.utils.ColorScheme;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -12,30 +15,38 @@ import javax.swing.ImageIcon;
 
 public class SynergyIcons {
     
-    public static Icon getLogoIcon(int size) {
-        // Try to load from resources
-        URL imgUrl = SynergyIcons.class.getResource("/resources/logo.png");
-        if (imgUrl == null) {
-            // Try fallback path if resources folder is in src root but not in classpath yet
-            imgUrl = SynergyIcons.class.getClassLoader().getResource("resources/logo.png");
-        }
-        
-        if (imgUrl != null) {
-            ImageIcon icon = new ImageIcon(imgUrl);
-            Image img = icon.getImage();
-            Image newImg = img.getScaledInstance(size, size, Image.SCALE_SMOOTH);
-            return new ImageIcon(newImg);
-        }
+    public static Icon getAlertIcon(int size) {
+        return new Icon() {
+            @Override
+            public void paintIcon(Component c, Graphics g, int x, int y) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                g2.setColor(ColorScheme.PRIMARY_RED);
+                g2.fillOval(x, y, size, size);
+                g2.setColor(Color.WHITE);
+                g2.setFont(new Font("SansSerif", Font.BOLD, size / 2));
+                g2.drawString("!", x + size / 2 - size / 8, y + size / 2 + size / 4);
+                g2.dispose();
+            }
+            @Override public int getIconWidth() { return size; }
+            @Override public int getIconHeight() { return size; }
+        };
+    }
 
-        // Fallback to vector drawing if image not found
+    public static Icon getLogoIcon(int size) {
+        // Vector-based placeholder logo
         return new VectorIcon(size, size) {
             @Override
             protected void paintIcon(Graphics2D g2, int width, int height) {
-                g2.setColor(ColorScheme.TABLE_HEADER_TEXT);
-                int w = width;
-                int h = height;
-                g2.fillArc(w/4, h/4, w/2, h/2, 90, 180);
-                g2.fillOval(w/4, h/4, w/4, h/4);
+                g2.setColor(ColorScheme.PRIMARY_BLUE);
+                g2.fillOval(0, 0, width, height);
+                g2.setColor(Color.WHITE);
+                g2.setFont(new Font("Arial", Font.BOLD, (int)(size * 0.7)));
+                String text = "П";
+                FontMetrics fm = g2.getFontMetrics();
+                int x = (width - fm.stringWidth(text)) / 2;
+                int y = (height - fm.getHeight()) / 2 + fm.getAscent();
+                g2.drawString(text, x, y);
             }
         };
     }
@@ -54,54 +65,56 @@ public class SynergyIcons {
     }
 
     public static Icon getGridIcon(int size, boolean active) {
+        // New icon: Book
         return new VectorIcon(size, size) {
             @Override
             protected void paintIcon(Graphics2D g2, int width, int height) {
                 g2.setColor(active ? ColorScheme.ICON_ACTIVE : ColorScheme.ICON_INACTIVE);
-                int gap = 2;
-                int box = (width - gap) / 2;
-                g2.fillRect(0, 0, box, box);
-                g2.fillRect(box + gap, 0, box, box);
-                g2.fillRect(0, box + gap, box, box);
-                g2.fillRect(box + gap, box + gap, box, box);
+                g2.setStroke(new java.awt.BasicStroke(1.5f));
+                g2.drawRect(3, 2, width - 6, height - 4); // Book cover
+                g2.drawLine(width / 2, 2, width / 2, height - 2); // Spine
             }
         };
     }
 
     public static Icon getCalendarIcon(int size, boolean active) {
+        // New icon: Modern Calendar
         return new VectorIcon(size, size) {
             @Override
             protected void paintIcon(Graphics2D g2, int width, int height) {
                 g2.setColor(active ? ColorScheme.ICON_ACTIVE : ColorScheme.ICON_INACTIVE);
-                g2.drawRoundRect(1, 3, width-2, height-4, 2, 2);
-                g2.fillRect(1, 3, width-2, 3);
-                g2.fillRect(4, 1, 2, 4);
-                g2.fillRect(width-6, 1, 2, 4);
+                g2.setStroke(new java.awt.BasicStroke(1.5f));
+                g2.drawRoundRect(2, 3, width - 4, height - 5, 4, 4); // Calendar body
+                g2.drawLine(2, 7, width - 2, 7); // Line for header
+                g2.fillRect(5, 1, 2, 4); // Left ring holder
+                g2.fillRect(width - 7, 1, 2, 4); // Right ring holder
             }
         };
     }
     
     public static Icon getBillIcon(int size, boolean active) {
+        // New icon: Wallet
         return new VectorIcon(size, size) {
             @Override
             protected void paintIcon(Graphics2D g2, int width, int height) {
                 g2.setColor(active ? ColorScheme.ICON_ACTIVE : ColorScheme.ICON_INACTIVE);
-                g2.fillRect(3, 1, width-6, height-2);
-                g2.setColor(ColorScheme.TOP_BAR_BG);
-                g2.drawLine(5, 4, width-5, 4);
-                g2.drawLine(5, 7, width-5, 7);
+                g2.setStroke(new java.awt.BasicStroke(1.5f));
+                g2.drawRoundRect(2, 4, width - 4, height - 7, 4, 4); // Wallet body
+                g2.drawRoundRect(width - 6, 2, 3, 3, 2, 2); // Clasp
             }
         };
     }
 
     public static Icon getDocumentIcon(int size, boolean active) {
+        // New icon: Open Diary/Book
         return new VectorIcon(size, size) {
             @Override
             protected void paintIcon(Graphics2D g2, int width, int height) {
                 g2.setColor(active ? ColorScheme.ICON_ACTIVE : ColorScheme.ICON_INACTIVE);
-                int[] x = {3, 10, 13, 13, 3};
-                int[] y = {1, 1, 4, 15, 15};
-                g2.fillPolygon(x, y, 5);
+                g2.setStroke(new java.awt.BasicStroke(1.5f));
+                g2.drawLine(width / 2, 3, width / 2, height - 3); // Spine
+                g2.drawArc(2, 3, width / 2 - 2, height - 6, 90, 180);
+                g2.drawArc(width / 2, 3, width / 2 - 2, height - 6, 90, -180);
             }
         };
     }

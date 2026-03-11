@@ -1,5 +1,7 @@
 package com.synergy.auth;
 
+import com.synergy.utils.FontManager;
+import com.synergy.utils.Localization;
 import com.synergy.ui.PillButton;
 import com.synergy.ui.StyledPasswordField;
 import com.synergy.ui.StyledTextField;
@@ -49,15 +51,15 @@ public class LoginPanel extends JPanel {
         card.add(createLogoLabel(), gbc);
         
         gbc.insets = new Insets(0, 0, 10, 0);
-        card.add(new JLabel("Вход"), gbc);
+        card.add(new JLabel(Localization.get("login.title")), gbc);
         
-        StyledTextField loginField = new StyledTextField("Имя пользователя");
+        StyledTextField loginField = new StyledTextField(Localization.get("login.username"));
         card.add(loginField, gbc);
         
         gbc.insets = new Insets(10, 0, 10, 0);
-        card.add(new JLabel("Пароль"), gbc);
+        card.add(new JLabel(Localization.get("login.password")), gbc);
         
-        StyledPasswordField passField = new StyledPasswordField();
+        StyledPasswordField passField = new StyledPasswordField(Localization.get("login.password"));
         card.add(passField, gbc);
         
         gbc.insets = new Insets(20, 0, 10, 0);
@@ -76,15 +78,15 @@ public class LoginPanel extends JPanel {
     }
     
     private JLabel createLogoLabel() {
-        JLabel logo = new JLabel("УНИВЕРСИТЕТ СИНЕРГИЯ", SynergyIcons.getLogoIcon(32), JLabel.CENTER);
-        logo.setFont(new Font("Arial", Font.BOLD, 20));
+        JLabel logo = new JLabel(Localization.get("app.title"), SynergyIcons.getLogoIcon(32), JLabel.CENTER);
+        logo.setFont(FontManager.getBoldFont(20));
         logo.setForeground(ColorScheme.PRIMARY_TEXT);
         logo.setIconTextGap(10);
         return logo;
     }
     
     private PillButton createLoginButton(StyledTextField loginField) {
-        PillButton loginBtn = new PillButton("Войти", true);
+        PillButton loginBtn = new PillButton(Localization.get("login.btn"), true);
         loginBtn.setPreferredSize(new java.awt.Dimension(300, 40));
         loginBtn.addActionListener(e -> performLogin(loginField.getText()));
         return loginBtn;
@@ -92,15 +94,15 @@ public class LoginPanel extends JPanel {
     
     private void performLogin(String username) {
         if (!username.isEmpty()) {
-            UserSession.getInstance().login(username, "IS-101", username + "@synergy.ru");
+            UserSession.getInstance().login(username, "IK-101", username + "@school.ru");
         } else {
-            UserSession.getInstance().login("Student", "Group-1", "student@test.com");
+            UserSession.getInstance().login("Ученик", "5-А", "pupil@test.com");
         }
         onLoginSuccess.run();
     }
     
     private JLabel createHelpLabel() {
-        JLabel helpLabel = new JLabel("<html><u>Нет аккаунта? Получить код доступа</u></html>");
+        JLabel helpLabel = new JLabel("<html><u>" + Localization.get("login.no_account") + "</u></html>");
         helpLabel.setForeground(ColorScheme.PRIMARY_RED);
         helpLabel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         helpLabel.setHorizontalAlignment(JLabel.CENTER);
@@ -115,7 +117,7 @@ public class LoginPanel extends JPanel {
     
     private void showHelpDialog() {
         JOptionPane.showMessageDialog(this, 
-            "Пожалуйста, свяжитесь с деканатом для получения учетных данных.\nТелефон: +7 (495) 123-45-67", 
+            "Пожалуйста, свяжитесь с администрацией школы для получения учетных данных.\nТелефон: +7 (495) 123-45-67", 
             "Информация о доступе", JOptionPane.INFORMATION_MESSAGE);
     }
 }
